@@ -12,9 +12,10 @@ Create a environment for flask for version consistency
 `pyenv virtualenv 3.9.1`
 ### creating virtual envs
 
-`pyenv virtualenv 3.9.1 api@3.9.0 `
+`pyenv virtualenv 3.9.1 api@3.9.0`
 
 `vim .python-version` => add version name api@3.9.1
+
 ### check environment is active
 
 `pyenv virtualenvs`
