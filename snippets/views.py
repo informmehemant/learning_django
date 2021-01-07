@@ -54,15 +54,19 @@
 #         snippet.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
+from snippets.permissions import IsOwnerOrReadOnly
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer, UserSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
+from rest_framework import permissions
 
 
 class SnippetList(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -71,6 +75,8 @@ class SnippetList(generics.ListCreateAPIView):
 class SnippetDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 
 class UserList(generics.ListAPIView):
