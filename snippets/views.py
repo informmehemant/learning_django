@@ -61,6 +61,30 @@ from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework import permissions
 
+# method based root API
+
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from rest_framework.decorators import api_view
+from rest_framework import renderers
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'user': reverse('user-list', request, format=format),
+        'snippets': reverse('snippet-list', request=request, format=format)
+    })
+
+
+class SnippetHightlight(generics.GenericAPIView):
+    quesyset = Snippet.objects.all()
+    renderer_class = [renderers.StaticHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        snippet = self.get_obejct()
+        return Response(snippet.highlighted)
+
 
 class SnippetList(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
